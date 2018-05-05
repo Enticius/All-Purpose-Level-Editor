@@ -9,7 +9,7 @@ public class LevelEditor extends JPanel{
   ArrayList<String> directoryNameList = new ArrayList<String>();
   ArrayList<String> usedDirectoryNameList = new ArrayList<String>();
   ArrayList<ArrayList<File>> usedAssetList = new ArrayList<ArrayList<File>>();
-  ArrayList<Character> charKeys = new ArrayList<Character>();
+  ArrayList<ArrayList<Character>> charKeys = new ArrayList<ArrayList<Character>>();
   File key;
   
   public LevelEditor(){
@@ -18,13 +18,11 @@ public class LevelEditor extends JPanel{
     
     setUpWithKey();
     
-    System.out.println(usedAssetList.size());
-    
     for(int i = 0; i < usedAssetList.size(); i++){
       System.out.println(directoryNameList.get(i));
       for(int j = 0; j < usedAssetList.get(i).size(); j++){
         System.out.println(usedAssetList.get(i).get(j).getName());
-        System.out.println(charKeys.get(i));
+        System.out.println(charKeys.get(i).get(j));
       }
     }
   }
@@ -62,11 +60,12 @@ public class LevelEditor extends JPanel{
           if(!added){
             usedDirectoryNameList.add(directoryNameList.get(i));
             usedAssetList.add(new ArrayList<File>());
+            charKeys.add(new ArrayList<Character>());
             added = true;
           }
           usedAssetList.get(i).add(assetList.get(i).get(j));
           //Retrieve the index of the item found, which matches with the character key it's given.
-          charKeys.add(charKeysTemp.get(usedAssets.indexOf(assetList.get(i).get(j).getName().substring(0, assetList.get(i).get(j).getName().length() - 4))));
+          charKeys.get(i).add(charKeysTemp.get(usedAssets.indexOf(assetList.get(i).get(j).getName().substring(0, assetList.get(i).get(j).getName().length() - 4))));
         }
       }
     }
