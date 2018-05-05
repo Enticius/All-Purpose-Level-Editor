@@ -11,6 +11,7 @@ public class LevelEditor extends JPanel{
   ArrayList<ArrayList<File>> usedAssetList = new ArrayList<ArrayList<File>>();
   ArrayList<ArrayList<Character>> charKeys = new ArrayList<ArrayList<Character>>();
   File key;
+  Selector s;
   
   public LevelEditor(){
     File folder = new File(System.getProperty("user.dir") + "/Assets");
@@ -19,12 +20,14 @@ public class LevelEditor extends JPanel{
     setUpWithKey();
     
     for(int i = 0; i < usedAssetList.size(); i++){
-      System.out.println(directoryNameList.get(i));
+      System.out.println(usedDirectoryNameList.get(i));
       for(int j = 0; j < usedAssetList.get(i).size(); j++){
         System.out.println(usedAssetList.get(i).get(j).getName());
         System.out.println(charKeys.get(i).get(j));
       }
     }
+    
+    s = new Selector(usedAssetList, charKeys, usedDirectoryNameList, this);
   }
   
   public void setUpWithKey(){
@@ -109,11 +112,15 @@ public class LevelEditor extends JPanel{
   }
   
   public void paint(Graphics g){
+    super.paint(g);
+    
     Graphics2D g2d = (Graphics2D)g;
+    
+    s.paint(g2d);
   }
   
   public void update(){
-    
+    s.update();
   }
   
   public static void main(String[] args) throws InterruptedException{
