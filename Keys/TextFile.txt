@@ -1,4 +1,4 @@
 AmmoMachineGun-4
-BackgroundBig2-b
-BackgroundBig-B
+EnemyBasic1-1
+PistolIcon1-p
 AmmoSniper-s

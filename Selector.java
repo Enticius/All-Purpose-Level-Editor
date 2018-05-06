@@ -1,32 +1,26 @@
 import java.util.*;
 import java.io.*;
 import java.awt.*;
+import java.awt.event.*;
 
 public class Selector{
-  private ArrayList<ArrayList<File>> usedAssetList = new ArrayList<ArrayList<File>>();
-  private ArrayList<ArrayList<Character>> charKeys = new ArrayList<ArrayList<Character>>();
+  private ArrayList<ArrayList<ImageObject>> imageObjects = new ArrayList<ArrayList<ImageObject>>();
   private ArrayList<String> usedDirectoryNameList = new ArrayList<String>();
   private LevelEditor le;
-  private int tileSize = 16;
+  private int tileSize = LevelEditor.getTileSize();
   private int mouseX = 0;
   private int mouseY = 0;
   private int x = 0;
   private int y = 0;
+  private boolean mouseHeld = false;
   
-  public Selector(ArrayList<ArrayList<File>> tempUsedAssetList, ArrayList<ArrayList<Character>> tempCharKeys, ArrayList<String> tempUsedDirectoryNameList, LevelEditor le){
+  public Selector(ArrayList<ArrayList<ImageObject>> tempImageObjects, ArrayList<String> tempUsedDirectoryNameList, LevelEditor le){
     this.le = le;
     
-    for(int i = 0; i < tempUsedAssetList.size(); i++){
-      usedAssetList.add(new ArrayList<File>());
-      for(int j = 0; j < tempUsedAssetList.get(i).size(); j++){
-        usedAssetList.get(i).add(tempUsedAssetList.get(i).get(j));
-      }
-    }
-   
-    for(int i = 0; i < tempCharKeys.size(); i++){
-      charKeys.add(new ArrayList<Character>());
-      for(int j = 0; j < tempCharKeys.get(i).size(); j++){
-        charKeys.get(i).add(tempCharKeys.get(i).get(j));
+    for(int i = 0; i < tempImageObjects.size(); i++){
+      imageObjects.add(new ArrayList<ImageObject>());
+      for(int j = 0; j < tempImageObjects.get(i).size(); j++){
+        imageObjects.get(i).add(tempImageObjects.get(i).get(j));
       }
     }
     
@@ -40,10 +34,22 @@ public class Selector{
   }
   
   public void update(){
-    mouseX = ((int)(MouseInfo.getPointerInfo().getLocation().getX())) - ((int)(le.getLocationOnScreen().getX()));
-    mouseY = (int)(MouseInfo.getPointerInfo().getLocation().getY()) - ((int)(le.getLocationOnScreen().getY()));
+    mouseX = (int)(MouseInfo.getPointerInfo().getLocation().getX()) - (int)(le.getLocationOnScreen().getX());
+    mouseY = (int)(MouseInfo.getPointerInfo().getLocation().getY()) - (int)(le.getLocationOnScreen().getY());
     
     x = (int)(mouseX / tileSize);
     y = (int)(mouseY / tileSize);
+    
+    if(mouseHeld){
+      le.placeObject(imageObjects.get(0).get(0), x, y);
+    }
+  }
+  
+  public void mousePressed(MouseEvent e){
+    mouseHeld = true;
+  }
+  
+  public void mouseReleased(MouseEvent e){
+    mouseHeld = false;
   }
 }
