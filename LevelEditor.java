@@ -22,6 +22,9 @@ public class LevelEditor extends JPanel{
   private ArrayList<PlacedObject> placedObjects = new ArrayList<PlacedObject>();
   private File key;
   private Selector s;
+  //Offsets are measured in tiles.
+  private int xOffset = 0;
+  private int yOffset = 0;
   private static int tileSize = 16;
   
   public LevelEditor(){
@@ -55,13 +58,30 @@ public class LevelEditor extends JPanel{
       }
       @Override
       public void mousePressed(MouseEvent e) {
-          s.mousePressed(e);
+        s.mousePressed(e);
       }
       @Override
       public void mouseReleased(MouseEvent e) {
         s.mouseReleased(e);
       }
     });
+    
+    addKeyListener(new KeyListener() {
+      @Override
+      public void keyPressed(KeyEvent e){
+        s.keyPressed(e);
+      }
+      @Override
+      public void keyReleased(KeyEvent e){
+        s.keyReleased(e);
+      }
+      @Override
+      public void keyTyped(KeyEvent e){
+        
+      }
+    });
+    
+    setFocusable(true);
   }
   
   public void convertAssetsToObjects(){
@@ -162,7 +182,7 @@ public class LevelEditor extends JPanel{
     s.paint(g2d);
     
     for(int i = 0; i < placedObjects.size(); i++){
-      placedObjects.get(i).paint(g2d);
+      placedObjects.get(i).paint(g2d, xOffset, yOffset);
     }
   }
   
@@ -176,6 +196,22 @@ public class LevelEditor extends JPanel{
   
   public static int getTileSize(){
     return tileSize;
+  }
+  
+  public int getXOffset(){
+    return xOffset;
+  }
+  
+  public int getYOffset(){
+    return yOffset;
+  }
+  
+  public void incrementXOffset(int increment){
+    xOffset += increment;
+  }
+  
+  public void incrementYOffset(int increment){
+    yOffset += increment;
   }
   
   public static void main(String[] args) throws InterruptedException{

@@ -18,12 +18,20 @@ public class ImageObject{
     }
     this.charKey = charKey;
     tileSize = LevelEditor.getTileSize();
-    width = image.getWidth() / tileSize;
-    height = image.getHeight() / tileSize;
+    width = Math.max((int)(image.getWidth() / tileSize), 1);
+    height = Math.max((int)(image.getHeight() / tileSize), 1);
   }
   
   public BufferedImage getImage(){
     return image;
+  }
+  
+  public int getWidth(){
+    return width;
+  }
+  
+  public int getHeight(){
+    return height;
   }
   
   public char getCharKey(){

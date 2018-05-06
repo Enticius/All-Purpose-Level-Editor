@@ -2,3 +2,4 @@ AmmoMachineGun-4
 EnemyBasic1-1
 PistolIcon1-p
 AmmoSniper-s
+PlayerCharacter1-P
