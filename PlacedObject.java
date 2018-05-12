@@ -17,4 +17,16 @@ public class PlacedObject{
   public void paint(Graphics2D g2d, int xOffset, int yOffset){
     g2d.drawImage(i.getImage(), (x - xOffset) * tileSize, (y - yOffset) * tileSize, transparentColour, null);
   }
+  
+  public int getX(){
+    return x;
+  }
+  
+  public int getY(){
+    return y;
+  }
+  
+  public char getCharKey(){
+    return i.getCharKey();
+  }
 }

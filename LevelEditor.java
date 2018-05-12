@@ -26,6 +26,7 @@ public class LevelEditor extends JPanel{
   private int xOffset = 0;
   private int yOffset = 0;
   private static int tileSize = 16;
+  boolean needToSave = false;
   
   public LevelEditor(){
     File folder = new File(System.getProperty("user.dir") + "/Assets");
@@ -70,6 +71,10 @@ public class LevelEditor extends JPanel{
       @Override
       public void keyPressed(KeyEvent e){
         s.keyPressed(e);
+        
+        if(e.getKeyCode() == KeyEvent.VK_ENTER){
+          needToSave = true;
+        }
       }
       @Override
       public void keyReleased(KeyEvent e){
@@ -188,10 +193,106 @@ public class LevelEditor extends JPanel{
   
   public void update(){
     s.update();
+    if(needToSave){
+      saveLevelAsArray();
+      needToSave = false;
+    }
   }
   
   public void placeObject(ImageObject asset, int x, int y){
     placedObjects.add(new PlacedObject(asset, x, y));
+  }
+  
+  public void saveLevelAsArray(){
+    int minX = 0;
+    int minY = 0;
+    int maxX = 0;
+    int maxY = 0;
+    if(placedObjects.size() > 0){
+      minX = placedObjects.get(0).getX();
+      minY = placedObjects.get(0).getY();
+      maxX = placedObjects.get(0).getX();
+      maxY = placedObjects.get(0).getY();
+    }
+    int xShift = 0;
+    int yShift = 0;
+    
+    for(int i = 0; i < placedObjects.size(); i++){
+      if(placedObjects.get(i).getX() < minX){
+        minX = placedObjects.get(i).getX();
+      }
+      
+      if(placedObjects.get(i).getX() > maxX){
+        maxX = placedObjects.get(i).getX();
+      }
+      
+      if(placedObjects.get(i).getY() < minY){
+        minY = placedObjects.get(i).getY();
+      }
+      
+      if(placedObjects.get(i).getY() > maxY){
+        maxY = placedObjects.get(i).getY();
+      }
+    }
+    
+    while(minX < 0){
+      minX++;
+      maxX++;
+      xShift++;
+    }
+    
+    while(minY < 0){
+      minY++;
+      maxY++;
+      yShift++;
+    }
+    
+    while(minX > 0){
+      minX--;
+      maxX--;
+      xShift--;
+    }
+    
+    while(minY > 0){
+      minY--;
+      maxY--;
+      yShift--;
+    }
+    
+    System.out.println(maxX + " " + maxY);
+    
+    char[][] levelArray = new char[maxY + 1][maxX + 1];
+    
+    for(int i = 0; i < levelArray.length; i++){
+      for(int j = 0; j < levelArray[i].length; j++){
+        //0 is temp default char, get user to specify in legend later.
+        levelArray[i][j] = '0';
+      }
+    }
+    
+    for(int i = 0; i < placedObjects.size(); i++){
+      levelArray[placedObjects.get(i).getY() + yShift][placedObjects.get(i).getX() + xShift] = placedObjects.get(i).getCharKey();
+    }
+    
+    try{
+      String levelName = getInput("Level Name");
+      File f = new File(System.getProperty("user.dir") + "/SavedLevelArrays/" + levelName + ".txt");
+      FileWriter fw = new FileWriter(f);
+      PrintWriter pw = new PrintWriter(fw);
+      for(int i = 0; i < levelArray.length; i++){
+        for(int j = 0; j < levelArray[i].length; j++){
+          if(j != levelArray[i].length - 1){
+            pw.print(levelArray[i][j] + " ");
+          } else if(i != levelArray.length - 1){
+            pw.println(levelArray[i][j]);
+          } else {
+            pw.print(levelArray[i][j]);
+          }
+        }
+      }
+    } catch (IOException e){
+      System.out.println("Failed to save file.");
+    }
   }
   
   public static int getTileSize(){
