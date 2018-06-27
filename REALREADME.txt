@@ -9,3 +9,11 @@ contain a "key" in the format <AssetName>-<character> (e.g. Couch-c)(Case sensit
 .png). This will include the Asset in the list of used assets and assign the character to be used in the 2D level array to that
 particular Asset (this of course means there should be no duplicate character's used, or multiple "keys" for one asset). You can
 store as many "legends" as you want, the program will prompt you for the "legend" to use on startup.
+
+CONTROLS
+W, A, S, D - Move camera position in level
+Left Click - Place Object
+Right Click - Remove Object
+Click on the banners at the top of the screen to switch between directories.
+Left, Right Arrows - Switch between assets in a directory
+Enter - Save level
