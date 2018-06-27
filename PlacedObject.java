@@ -29,4 +29,12 @@ public class PlacedObject{
   public char getCharKey(){
     return i.getCharKey();
   }
+  
+  public int getWidth(){
+    return i.getWidth();
+  }
+  
+  public int getHeight(){
+    return i.getHeight();
+  }
 }

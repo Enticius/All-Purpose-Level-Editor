@@ -15,6 +15,7 @@ public class Selector{
   private int lastX = 0;
   private int lastY = 0;
   private boolean mouseHeld = false;
+  private boolean delete = false;
   private boolean scrollUp = false;
   private boolean scrollDown = false;
   private boolean scrollLeft = false;
@@ -109,11 +110,16 @@ public class Selector{
     x = (int)(mouseX / tileSize) + le.getXOffset();
     y = (int)(mouseY / tileSize) + le.getYOffset();
     
-    if(mouseHeld && (lastX != x || lastY != y)){
+    if(mouseHeld && (lastX != x || lastY != y) && !delete){
       System.out.println(x + "," + y);
       le.placeObject(imageObjects.get(currentDirectory).get(currentObject), x, y);
       lastX = x;
       lastY = y;
+    } else if(mouseHeld && delete){
+      le.removeObject(x, y);
+      //Temporary fix, technically could cause an error if they delete an object on space (99999, 99999) then try to place an object there. Eventually create a bollean that allows code to ignore lastX and lastY.
+      lastX = 99999;
+      lastY = 99999;
     }
   }
   
@@ -121,13 +127,17 @@ public class Selector{
     //If the player clicks in an area where the tabs will be.
     if((((int)(MouseInfo.getPointerInfo().getLocation().getY())) - ((int)(le.getLocationOnScreen().getY()))) < tabHeight){
       switchTab();
-    } else {
+    } else if(e.getButton() == MouseEvent.BUTTON1) {
       mouseHeld = true;
+    } else if(e.getButton() == MouseEvent.BUTTON3) {
+      mouseHeld = true;
+      delete = true;
     }
   }
   
   public void mouseReleased(MouseEvent e){
     mouseHeld = false;
+    delete = false;
   }
   
   public void switchTab(){

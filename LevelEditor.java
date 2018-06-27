@@ -114,6 +114,8 @@ public class LevelEditor extends JPanel{
         usedAssets.add(temp[0]);
         charKeysTemp.add(new Character(temp[1].charAt(0)));
       }
+      
+      br.close();
     } catch (IOException e){
       
     }
@@ -203,6 +205,30 @@ public class LevelEditor extends JPanel{
     placedObjects.add(new PlacedObject(asset, x, y));
   }
   
+  public void removeObject(int x, int y){
+    int index = -1;
+    
+    int minX = 0;
+    int maxX = 0;
+    int minY = 0;
+    int maxY = 0;
+    
+    for(int i = 0; i < placedObjects.size(); i++){
+      minX = placedObjects.get(i).getX();
+      maxX = placedObjects.get(i).getX() + placedObjects.get(i).getWidth();
+      minY = placedObjects.get(i).getY();
+      maxY = placedObjects.get(i).getY() + placedObjects.get(i).getHeight();
+      
+      if(x >= minX && x <= maxX && y >= minY && y <= maxY){
+        index = i;
+      }
+    }
+    
+    if(index != -1){
+      placedObjects.remove(index);
+    }
+  }
+  
   public void saveLevelAsArray(){
     int minX = 0;
     int minY = 0;
@@ -223,7 +249,7 @@ public class LevelEditor extends JPanel{
       }
       
       if(placedObjects.get(i).getX() > maxX){
-        maxX = placedObjects.get(i).getX();
+        maxX = placedObjects.get(i).getX() + (placedObjects.get(i).getWidth() - 1);
       }
       
       if(placedObjects.get(i).getY() < minY){
@@ -231,7 +257,7 @@ public class LevelEditor extends JPanel{
       }
       
       if(placedObjects.get(i).getY() > maxY){
-        maxY = placedObjects.get(i).getY();
+        maxY = placedObjects.get(i).getY() + (placedObjects.get(i).getHeight());
       }
     }
     
@@ -272,6 +298,14 @@ public class LevelEditor extends JPanel{
     
     for(int i = 0; i < placedObjects.size(); i++){
       levelArray[placedObjects.get(i).getY() + yShift][placedObjects.get(i).getX() + xShift] = placedObjects.get(i).getCharKey();
+      
+      for(int j = 0; j < placedObjects.get(i).getHeight(); j++){
+        for(int k = 0; k < placedObjects.get(i).getWidth(); k++){
+          if(j != 0 || k != 0){
+            levelArray[placedObjects.get(i).getY() + yShift + j][placedObjects.get(i).getX() + xShift + k] = 'X';
+          }
+        }
+      }
     }
     
     try{
@@ -290,9 +324,19 @@ public class LevelEditor extends JPanel{
           }
         }
       }
+      
+      pw.close();
     } catch (IOException e){
       System.out.println("Failed to save file.");
     }
+  }
+  
+  public void loadLevelArray(){
+//    try{
+//      
+//    } catch(IOException e){
+//      System.out.println("Failed to Load Level");
+//    }
   }
   
   public static int getTileSize(){
