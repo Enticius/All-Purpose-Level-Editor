@@ -27,6 +27,7 @@ public class LevelEditor extends JPanel{
   private int yOffset = 0;
   private static int tileSize = 16;
   boolean needToSave = false;
+  boolean needToLoad = false;
   
   public LevelEditor(){
     File folder = new File(System.getProperty("user.dir") + "/Assets");
@@ -74,6 +75,8 @@ public class LevelEditor extends JPanel{
         
         if(e.getKeyCode() == KeyEvent.VK_ENTER){
           needToSave = true;
+        } else if(e.getKeyCode() == KeyEvent.VK_L){
+          needToLoad = true;
         }
       }
       @Override
@@ -195,9 +198,15 @@ public class LevelEditor extends JPanel{
   
   public void update(){
     s.update();
+    
     if(needToSave){
       saveLevelAsArray();
       needToSave = false;
+    }
+    
+    if(needToLoad){
+      loadLevelArray();
+      needToLoad = false;
     }
   }
   
@@ -332,11 +341,40 @@ public class LevelEditor extends JPanel{
   }
   
   public void loadLevelArray(){
-//    try{
-//      
-//    } catch(IOException e){
-//      System.out.println("Failed to Load Level");
-//    }
+    try{
+      String levelName = getInput("Level Name");
+      FileReader fr = new FileReader(System.getProperty("user.dir") + "/SavedLevelArrays/" + levelName + ".txt");
+      BufferedReader br = new BufferedReader(fr);
+      
+      String line;
+      int i = 0;
+      while((line = br.readLine()) != null){
+        String[] charArray = line.split(" ");
+        for(int j = 0; j < charArray.length; j++){
+          boolean found = false;
+          
+          if(charArray[j].charAt(0) != 'X' && charArray[j].charAt(0) != '0'){
+            for(int m = 0; m < imageObjects.size(); m++){
+              for(int n = 0; n < imageObjects.get(m).size(); n++){
+                if(charArray[j].charAt(0) == imageObjects.get(m).get(n).getCharKey()){
+                  placedObjects.add(new PlacedObject(imageObjects.get(m).get(n), j, i));
+                  found = true;
+                  break;
+                }
+              }
+              
+              if(found){
+                break;
+              }
+            }
+          }
+        }
+        
+        i++;
+      }
+    } catch(IOException e){
+      System.out.println("Failed to Load Level");
+    }
   }
   
   public static int getTileSize(){
